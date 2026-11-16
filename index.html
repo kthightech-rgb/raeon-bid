@@ -157,7 +157,7 @@
 <body>
 <header class="top">
   <div>
-    <h1>입찰공고 도우미 래온 <span style="font-size:13px;font-weight:400;opacity:.75">v1.0</span></h1>
+    <h1>입찰공고 도우미 래온 <span style="font-size:13px;font-weight:400;opacity:.75">v1.1</span></h1>
     <p>주택관리업자 · 공사 · 용역 · 물품 · 잡수입 입찰공고문 작성과 K-apt 등록 준비 · 모든 입력값은 이 브라우저 안에만 저장됩니다 · 결과는 참고용이며 최종 확인 책임은 발주처에 있습니다</p>
     <div id="lawBar"><span>법령 확인: 연결 설정에서 OC를 넣으면 개정 여부를 자동 확인합니다</span></div>
   </div>
@@ -363,7 +363,7 @@
   <h2><span class="sn">3</span>금액·기간·보증금</h2>
   <div class="form">
     <label>계약 기간 <span class="req">필수</span></label>
-    <div class="oneline"><input type="date" id="c_cs"> ~ <input type="date" id="c_ce"> <span id="monHint" class="muted"></span></div>
+    <div><div class="oneline"><span class="seg" id="segCmode"><button data-v="날짜">날짜로 정하기</button><button data-v="기간">「계약일부터 ○개월·○일」로 정하기</button></span></div><div class="oneline" id="cDateBox" style="margin-top:6px"><input type="date" id="c_cs"> ~ <input type="date" id="c_ce"></div><div class="oneline hidden" id="cDurBox" style="margin-top:6px"><select id="c_durBase"><option>계약일부터</option><option>착공일부터</option><option>계약 체결일부터</option><option>납품 요청일부터</option></select><input type="text" id="c_durN" class="num" style="width:70px" placeholder="12"><select id="c_durU"><option>개월</option><option>일</option></select><span class="muted">(예: 착공일부터 30일, 계약일부터 12개월)</span></div><span id="monHint" class="muted"></span></div>
     <label id="capLbl">입찰가격 상한 <span class="opt">선택</span></label>
     <div class="oneline"><label class="oneline"><input type="checkbox" id="c_useCeil"> 공고함</label><span id="ceilBox" class="oneline"><input type="text" id="c_ceil" class="money" style="width:180px" placeholder="280,000,000">원 <span class="muted">(부가세 제외)</span> <span id="ceilKor" class="muted"></span></span></div>
     <label id="ceilBasisLbl">상한(하한) 근거 <span class="req">상한 공고 시 필수</span><small>지침 제24조제5항</small></label>
@@ -588,7 +588,7 @@
 <!-- ======================= (예비) ======================= -->
 <div id="stepSoon" class="hidden"><section class="card soonBox"><h2 style="justify-content:center">준비 중인 단계입니다</h2><p>소장님이 ①~⑥ 단계를 써 보신 뒤 마지막으로 만듭니다.<br>⑦ K-apt 입찰계획서 입력표 → ⑤ 공고문 → ⑥ 자가진단 → ⑦ K-apt 등록</p><button class="big" id="backFromSoon">← ⑥ 자가진단으로</button></section></div>
 </main>
-<footer>입찰공고 도우미 래온 v1.0 · 기준: 「주택관리업자 및 사업자 선정지침」 국토교통부고시 제2024-196호, 「공동주택관리법」·시행령 2026.7.1. 시행본 · 법령 개정 시 경고만 표시하며 규칙은 자동으로 바뀌지 않습니다</footer>
+<footer>입찰공고 도우미 래온 v1.1 · 기준: 「주택관리업자 및 사업자 선정지침」 국토교통부고시 제2024-196호, 「공동주택관리법」·시행령 2026.7.1. 시행본 · 법령 개정 시 경고만 표시하며 규칙은 자동으로 바뀌지 않습니다</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
@@ -1004,7 +1004,7 @@ const exOf = (M, t) => M[t.id] || (t.kind === 'work' ? M.W : M._);
 
 const curType = () => TYPES.find(x => x.id === S.bid.type);
 const kindOf = t => t ? (t.kind === 'mgr' ? 'mgr' : t.kind === 'work' ? 'work' : 'svc') : 'svc';
-const C_FIELDS = ['c_lic', 'c_recHH', 'c_recN', 'c_recUnit', 'c_recDone', 'c_tech', 'c_cap', 'c_capLaw', 'c_etcQual', 'c_nmN', 'c_evTech', 'c_evEquip', 'c_ptPages', 'c_cs', 'c_ce', 'c_ceil', 'c_ceilBasis', 'c_ceilNote', 'c_bidBond', 'c_defRate', 'c_pay', 'c_docAdd'];
+const C_FIELDS = ['c_lic', 'c_recHH', 'c_recN', 'c_recUnit', 'c_recDone', 'c_tech', 'c_cap', 'c_capLaw', 'c_etcQual', 'c_nmN', 'c_evTech', 'c_evEquip', 'c_ptPages', 'c_cs', 'c_ce', 'c_durBase', 'c_durN', 'c_durU', 'c_ceil', 'c_ceilBasis', 'c_ceilNote', 'c_bidBond', 'c_defRate', 'c_pay', 'c_docAdd'];
 const C_CHECKS = ['c_useRec', 'c_useTech', 'c_tech10', 'c_useCap', 'c_nm1', 'c_nm2', 'c_useCeil', 'c_bondFree', 'c_settle', 'c_noProp'];
 function saveCond() { C_FIELDS.forEach(id => C[id] = $(id).value); C_CHECKS.forEach(id => C[id] = $(id).checked); saveS(); }
 function loadCond() { C_FIELDS.forEach(id => { if (C[id] != null) $(id).value = C[id]; }); C_CHECKS.forEach(id => { if (C[id] != null) $(id).checked = C[id]; }); }
@@ -1095,6 +1095,10 @@ function renderEvalEx(t) {
 }
 $('btnEvalEx').addEventListener('click', () => { $('evalEx').classList.toggle('hidden'); const t = curType(); if (t && !$('evalEx').classList.contains('hidden')) renderEvalEx(t); });
 
+/* 계약기간: 날짜 방식 또는 「○○부터 N개월·일」 방식 */
+const ctMonths = () => { const c = S.cond || {}; if (c.cmode === '기간') return c.c_durU === '개월' ? (unfmt(c.c_durN) || 0) : 0; return months(c.c_cs, c.c_ce); };
+const ctHas = () => { const c = S.cond || {}; return c.cmode === '기간' ? !!unfmt(c.c_durN) : !!(c.c_cs && c.c_ce); };
+const ctText = () => { const c = S.cond || {}; if (c.cmode === '기간') return unfmt(c.c_durN) ? `${c.c_durBase || '계약일부터'} ${c.c_durN}${c.c_durU || '개월'}` : '○○'; return c.c_cs && c.c_ce ? `${KD(c.c_cs).replace(/\(.\)$/, '')} ~ ${KD(c.c_ce).replace(/\(.\)$/, '')} (${Math.round(months(c.c_cs, c.c_ce))}개월)` : '○○'; };
 function months(a, b) { if (!a || !b) return 0; const d1 = new Date(a), d2 = new Date(b); d2.setDate(d2.getDate() + 1); return (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth()) + (d2.getDate() - d1.getDate()) / 30.4; }
 const selLics = () => (C.licKeys || []).map(k => LICS[k]).filter(Boolean);
 
@@ -1127,7 +1131,8 @@ function renderCond() {
   $('ptPagesBox').classList.toggle('hidden', C.pt === '없음'); $('noPropRow').classList.toggle('hidden', C.pt !== '없음');
   if (C.award === '적격') renderEval(t);
   /* 금액·기간 */
-  const mo = months($('c_cs').value, $('c_ce').value);
+  $('cDateBox').classList.toggle('hidden', C.cmode === '기간'); $('cDurBox').classList.toggle('hidden', C.cmode !== '기간');
+  const mo = ctMonths();
   $('monHint').textContent = mo ? `약 ${Math.round(mo * 10) / 10}개월` + (svc ? ' · 입찰가격 = 월간 용역비 × 개월 수 (지침 제28조제2항)' : '') : '';
   $('capLbl').innerHTML = (high ? '입찰가격 하한' : '입찰가격 상한') + ' <span class="opt">선택</span>';
   $('ceilBox').classList.toggle('dim', !C.c_useCeil); $('ceilBasisLbl').classList.toggle('hidden', !C.c_useCeil); $('ceilBasisBox').classList.toggle('hidden', !C.c_useCeil);
@@ -1192,8 +1197,10 @@ function renderCond() {
     else if (S.apt.rule !== '기타') add('ok', `세부배점 간격이 있는 ${EVAL[S.apt.rule].law} 서식을 공고문 붙임으로 넣습니다. 단지 관리규약 평가표가 다르면 그 표를 써야 합니다.`, '국토부 주택건설공급과 회신(2017.12.21.)');
     if (C.paper === 'Y') add('warn', '적격심사 서류를 서면으로도 받으려면 입대의 의결을 거쳐 공고문에 명시해야 하고, 내용이 다르면 전자입찰시스템 등록본이 우선합니다.', '지침 제8조제2항');
   }
-  if (!$('c_cs').value || !$('c_ce').value) add('err', '계약 기간을 넣으세요 (공고문 필수 항목).', mgr ? '지침 제16조제1항제10호' : '지침 제24조제1항제9호');
-  else if ($('c_ce').value < $('c_cs').value) add('err', '계약 종료일이 시작일보다 빠릅니다.', '');
+  if (!ctHas()) add('err', C.cmode === '기간' ? '계약 기간(○개월·○일)을 넣으세요 (공고문 필수 항목).' : '계약 기간(시작일·종료일)을 넣으세요 (공고문 필수 항목). 날짜를 아직 못 정했으면 「계약일부터 ○개월·○일」 방식을 고르세요.', mgr ? '지침 제16조제1항제10호' : '지침 제24조제1항제9호');
+  else if (C.cmode !== '기간' && $('c_ce').value < $('c_cs').value) add('err', '계약 종료일이 시작일보다 빠릅니다.', '');
+  if (svc && C.cmode === '기간' && C.c_durU === '일') add('err', '용역의 입찰가격은 「월간 용역비 × 용역기간 개월 수」라서 기간을 개월로 정해야 합니다.', '지침 제28조제2항');
+  if (C.cmode === '기간' && ctHas()) add('ok', `계약 기간: ${ctText()} — 공고문에 이대로 적힙니다. ④ 추천 일정·계약 시작 점검은 날짜 방식에서만 계산됩니다.`, mgr ? '지침 제16조제1항제10호' : '지침 제24조제1항제9호');
   if (mgr && mo && Math.abs(mo - 36) > 1) add('warn', `계약기간 약 ${Math.round(mo)}개월 — 영 제5조제2항제4호는 장기수선계획 조정 주기(3년)를 고려하도록 정하고, 경기 준칙 제51조제2항은 3년으로 정합니다.`, '영 제5조제2항제4호');
   if (C.c_useCeil) {
     const ce = unfmt($('c_ceil').value);
@@ -1223,7 +1230,7 @@ function initCond() {
   C.evalSrc = C.evalSrc || '준칙'; C.pt = C.pt || '서면'; C.paper = C.paper || 'N'; C.def = C.def || '국계법';
   if (C.c_bidBond == null || C.c_bidBond === '') { C.c_bidBond = '5'; $('c_bidBond').value = '5'; }
   const rr = () => { saveCond(); renderCond(); };
-  seg('segKind', 'kind', C, rr); seg('segAward', 'award', C, rr); seg('segEval', 'evalSrc', C, rr); seg('segW', 'w', C, rr); seg('segPT', 'pt', C, rr); seg('segPaper', 'paper', C, rr); seg('segDef', 'def', C, rr);
+  C.cmode = C.cmode || '날짜'; seg('segCmode', 'cmode', C, rr); seg('segKind', 'kind', C, rr); seg('segAward', 'award', C, rr); seg('segEval', 'evalSrc', C, rr); seg('segW', 'w', C, rr); seg('segPT', 'pt', C, rr); seg('segPaper', 'paper', C, rr); seg('segDef', 'def', C, rr);
 }
 initCond();
 $('back2').addEventListener('click', () => go(2));
@@ -1303,7 +1310,7 @@ $('d_ev').addEventListener('change', () => { if (!D._touch?.d_award) { $('d_awar
 
 /* 추천 일정: 계약 시작일 역산 */
 function makePlan() {
-  const start = S.cond?.c_cs; if (!start) return null;
+  const start = S.cond?.cmode === '기간' ? null : S.cond?.c_cs; if (!start) return null;
   const tk = S.cond?.award === '적격', mgr = curType()?.kind === 'mgr';
   const ct = prevWork(addD(start, -7));                 // 계약 체결: 시작 7일 전(근무일)
   const award = prevWork(addD(ct, -5));                 // 낙찰자 결정: 계약 5일 전
@@ -1316,7 +1323,7 @@ function makePlan() {
 }
 function renderPlan() {
   const p = makePlan();
-  if (!p) { $('planBox').innerHTML = '<p class="muted">③ 입찰 조건에서 계약 기간(시작일)을 넣으면 거꾸로 계산한 추천 일정이 나옵니다.</p>'; $('btnPlan').disabled = true; return; }
+  if (!p) { $('planBox').innerHTML = (S.cond?.cmode === '기간' ? '<p class="muted">③에서 계약기간을 「계약일부터 ○개월·○일」로 정해 계약 시작일이 없어 역산 추천을 하지 않습니다. 날짜로 정하면 추천 일정이 나옵니다.</p>' : '<p class="muted">③ 입찰 조건에서 계약 기간(시작일)을 넣으면 거꾸로 계산한 추천 일정이 나옵니다.</p>'); $('btnPlan').disabled = true; return; }
   $('btnPlan').disabled = false;
   const rows = [['입대의 의결', p.res, '공고 1주 전 권장'], ...(p.mgr ? [['입주자등 과반수 동의 완료', p.agree, '선관위 동의 업무 30일 이내(경기 준칙 제49조③) — 의결은 그보다 앞서야 함']] : []), ['입찰공고 (K-apt 게시)', p.pub, '최소 공고기간 확보'], ['입찰서 제출 마감', p.dl, '근무일 17:00'], ...(p.ev ? [['적격심사 평가', p.ev, '마감 후 서류 검토 1주']] : []), ['낙찰자 결정', p.award, ''], ['계약 체결', p.ct, '계약 시작 1주 전'], ['계약 시작', p.start, '③에서 입력']];
   $('planBox').innerHTML = `<table><thead><tr><th>단계</th><th>추천일</th><th>메모</th></tr></thead><tbody>${rows.map(([a, d, m]) => `<tr><td>${a}</td><td><b>${KD(d)}</b></td><td class="muted">${m}</td></tr>`).join('')}</tbody></table>
@@ -1334,7 +1341,7 @@ function renderSch() {
   const t = curType(); if (!t) return;
   rebuildHol();
   const mgr = t.kind === 'mgr', tk = S.cond?.award === '적격', amt = unfmt(S.bid.b_amt), work = t.kind === 'work';
-  $('d_typeLine').innerHTML = `<b>${esc(S.bid.b_title || t.name)}</b> · ${S.cond?.kind ? S.cond.kind + '경쟁' : '입찰종류 미정'} · ${tk ? '적격심사' : t.high ? '최고낙찰' : '최저낙찰'} · ${shortOK() ? (S.bid.urgent === 'Y' ? '긴급입찰' : '재공고') + '(5일 공고 가능)' : '일반 공고(10일)'} · 계약기간 ${S.cond?.c_cs ? KD(S.cond.c_cs) + ' ~ ' + KD(S.cond.c_ce) : '미입력'}`;
+  $('d_typeLine').innerHTML = `<b>${esc(S.bid.b_title || t.name)}</b> · ${S.cond?.kind ? S.cond.kind + '경쟁' : '입찰종류 미정'} · ${tk ? '적격심사' : t.high ? '최고낙찰' : '최저낙찰'} · ${shortOK() ? (S.bid.urgent === 'Y' ? '긴급입찰' : '재공고') + '(5일 공고 가능)' : '일반 공고(10일)'} · 계약기간 ${ctText()}`;
   $('d_holSrc').textContent = HOL_API || '앱 내장 공휴일 표(2026~2027) 사용 중';
   $('d_agreeLbl').classList.toggle('hidden', !mgr); $('d_agreeBox').classList.toggle('hidden', !mgr);
   const seoulAdv = S.apt.rule === '서울' && amt && ((work && amt >= 1e8) || (t.kind === 'svc' && amt >= 5e7));
@@ -1376,7 +1383,7 @@ function renderSch() {
   if (ct) R('계약 체결 (예정)', ct, '', `계약보증금 ${work ? '20' : '10'}% 수령`, mgr ? '지침 제21조④' : '지침 제29조④');
   if (ct) R('계약서 공개 기한 — 홈페이지·동별게시판', ctPub, '', '계약 체결일부터 1개월 이내, 개인정보 제외 (말일이 휴일이면 다음 근무일, 민법 제161조)', '법 제28조', 'due');
   if (ct && (mgr || t.resident)) R('4대보험 가입증명서 수령 기한', ctPub, '', '계약 체결 후 1개월 이내', mgr ? '지침 제21조④' : '지침 제29조⑤', 'due');
-  if (S.cond?.c_cs) R('계약 시작', S.cond.c_cs, '', '③ 입력값', '');
+  if (S.cond?.c_cs && S.cond?.cmode !== '기간') R('계약 시작', S.cond.c_cs, '', '③ 입력값', '');
   $('d_table').innerHTML = `<table class="sched"><thead><tr><th>단계</th><th>일자</th><th>시각</th><th>기준</th><th>근거</th></tr></thead><tbody>${rows.map(r => `<tr class="${r.cls || ''}"><td>${r.cls === 'due' ? '⏰ ' : ''}${r.st}</td><td><b>${KD(r.date)}</b>${r.date && why(r.date) && !/계약 시작|공개 기한|체결 기한|수령 기한/.test(r.st) ? `<br><span class="badge b-warn">${esc(why(r.date))}</span>` : ''}</td><td>${r.time || ''}</td><td class="muted">${r.rule}</td><td class="law">${r.law}</td></tr>`).join('')}</tbody></table>`;
   D._rows = rows.map(r => ({ st: r.st, date: r.date, time: r.time })); D.viewDue = viewDue;
 
@@ -1413,7 +1420,7 @@ function renderSch() {
   }
   if (!award) add('err', '낙찰자 결정 예정일을 넣으세요.', ''); else { if (tk && ev && award < ev) add('err', '낙찰자 결정일이 적격심사일보다 빠릅니다.', ''); if (!tk && open && award < open) add('err', '낙찰자 결정일이 개찰일보다 빠릅니다.', ''); }
   if (ct) { if (award && ct < award) add('err', '계약 체결일이 낙찰자 결정일보다 빠릅니다.', ''); if (ctDue && ct > ctDue) add('warn', `계약 체결 예정일이 낙찰 후 10일(${KD(ctDue)})을 넘습니다. 특별한 사유가 없으면 낙찰 무효 사유가 될 수 있습니다.`, mgr ? '지침 제21조③' : '지침 제29조③'); }
-  const cs = S.cond?.c_cs;
+  const cs = S.cond?.cmode === '기간' ? '' : S.cond?.c_cs;
   if (cs) { const last = ct || ctDue; if (last && last >= cs) add('err', `계약 체결${ct ? '' : ' 기한'}(${KD(last)})이 계약 시작일(${KD(cs)})과 같거나 늦습니다. 일정을 앞당기세요.`, ''); else if (pub && pub >= cs) add('err', `입찰공고일(${KD(pub)})이 계약 시작일(${KD(cs)}) 이후입니다.`, ''); else if (pub) { const pl = makePlan(); if (pl && pub > pl.rebid) add('warn', `공고(${KD(pub)})가 유찰 1회 대비 권장일(${KD(pl.rebid)})보다 늦습니다. 유찰되면 계약 시작 전까지 재공고·재심사할 시간이 빠듯합니다.`, '지침 제12조'); else add('ok', `공고부터 계약 시작까지 ${diffD(pub, cs)}일 — 유찰 1회 재공고 여유 있음`, ''); } }
   const ic = { err: '❌', warn: '⚠️', ok: '✅' }, order = { err: 0, warn: 1, ok: 2 };
   Q.sort((a, b) => order[a[0]] - order[b[0]]);
@@ -1461,14 +1468,14 @@ document.addEventListener('click', e => {
 
 /* ---- 문서 모델 ---- */
 const josa = (w, pair) => { const m = String(w).match(/[가-힣](?=[^가-힣]*$)/); if (!m) return pair.split('/')[0]; const has = (m[0].charCodeAt(0) - 0xAC00) % 28 > 0; const [a, b] = pair.split('/'); return has ? a : b; };
-const mon = () => { const m = months(S.cond.c_cs, S.cond.c_ce); return m ? Math.round(m) : 0; };
+const mon = () => { const m = ctMonths(); return m ? Math.round(m) : 0; };
 const lines = s => String(s || '').split('\n').map(x => x.trim()).filter(Boolean);
 const ko = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하'];
 function annexes() {
   const t = curType(), tk = S.cond.award === '적격';
   G.ann = G.ann || {};
   const A = [
-    ['bid', '입찰서 (선정지침 별지 제1호서식)', true, true],
+    ['bid', '입찰서 (선정지침 별지 제1호서식)', false, G.ann.bid ?? true],
     ['calc', '산출내역서 양식', false, G.ann.calc ?? true],
     ['eval', '적격심사 세부평가표', tk, tk],
     ['self', '적격심사 평가내용 일람표(자기평가표)', false, tk ? (G.ann.self ?? true) : false, !tk],
@@ -1498,7 +1505,7 @@ function buildDoc() {
   if (mgr) R1.push(['용역 운영', lines(G.g_ops).length ? lines(G.g_ops).join('\n') : `경비 ${dash(A.a_sec)}, 청소 ${dash(A.a_cln)}`]);
   R1.push([mgr ? '선정 대상' : '사 업 명', mgr ? '주택관리업자(공동주택 위탁관리)' : biz]);
   R1.push([mgr ? '관리 내용' : '사업 내용', lines(G.g_scope).join('\n') || '○○']);
-  R1.push(['계약 기간', C.c_cs ? `${KD(C.c_cs).replace(/\(.\)$/, '')} ~ ${KD(C.c_ce).replace(/\(.\)$/, '')} (${mon()}개월)` : '○○']);
+  R1.push(['계약 기간', ctText()]);
   T([22, 78], R1.map(([a, b]) => [{ t: a, hd: 1, al: 'C' }, b]));
   /* 2. 현장설명회 */
   sec('현장설명회');
@@ -1532,7 +1539,7 @@ function buildDoc() {
   /* 5. 제출서류 */
   sec(`입찰서 등 제출서류 (선정지침 ${art('제19조', '제27조')})`);
   const docs = baseDocs(t).filter(d => d[2]);
-  const note = { '1호': `붙임 ${annNo('bid')} 서식`, '2호': C.c_lic && !/해당 없음/.test(C.c_lic) ? C.c_lic.replace(/^.*따른\s*/, '') : '', '4호': '입찰공고일 이후 발급', '5호': '유효기간 이내', '6호': [C.c_useRec && '실적증명서', C.c_useTech && '기술자격증·4대보험 증빙', C.c_useCap && '법인등기사항증명서·재무제표 등'].filter(Boolean).join(', '), '7호': `붙임 ${annNo('eval')} 평가표 항목별 증빙(기업신용평가등급 확인서, 기술인력·장비 보유 증빙, ${mgr ? '관리실적 증명서' : '업무실적 증명서'}${C.pt !== '없음' ? ', 사업제안서' : ''})${annNo('self') ? ` 및 붙임 ${annNo('self')} 평가내용 일람표` : ''}`, '8호': `${annNo('calc') ? `붙임 ${annNo('calc')} 양식 사용, ` : ''}입찰금액과 총계 일치`, '9호': `입찰금액의 ${C.c_bidBond || 5}% 이상`, '10호': '입찰공고일 전일 기준 최근 1년간' };
+  const note = { '1호': annNo('bid') ? `붙임 ${annNo('bid')} 서식 · K-apt 전자 입력` : 'K-apt 전자입찰시스템에 전자적으로 입력(별지 제1호서식)', '2호': C.c_lic && !/해당 없음/.test(C.c_lic) ? C.c_lic.replace(/^.*따른\s*/, '') : '', '4호': '입찰공고일 이후 발급', '5호': '유효기간 이내', '6호': [C.c_useRec && '실적증명서', C.c_useTech && '기술자격증·4대보험 증빙', C.c_useCap && '법인등기사항증명서·재무제표 등'].filter(Boolean).join(', '), '7호': `붙임 ${annNo('eval')} 평가표 항목별 증빙(기업신용평가등급 확인서, 기술인력·장비 보유 증빙, ${mgr ? '관리실적 증명서' : '업무실적 증명서'}${C.pt !== '없음' ? ', 사업제안서' : ''})${annNo('self') ? ` 및 붙임 ${annNo('self')} 평가내용 일람표` : ''}`, '8호': `${annNo('calc') ? `붙임 ${annNo('calc')} 양식 사용, ` : '자유 양식, '}입찰금액과 총계 일치`, '9호': `입찰금액의 ${C.c_bidBond || 5}% 이상`, '10호': '입찰공고일 전일 기준 최근 1년간' };
   const DR = docs.map((d, i) => [{ t: String(i + 1), al: 'C' }, d[0].replace(/\s*\(별지 제1호서식[^)]*\)/, ''), note[d[1]] || '']);
   (C.extra || []).forEach(x => DR.push([{ t: String(DR.length + 1), al: 'C' }, x + ' 1부', /서약/.test(x) && annNo('pledge') ? `붙임 ${annNo('pledge')} — 제출 권장` : '']));
   T([8, 52, 40], [[{ t: 'No', hd: 1, al: 'C' }, { t: '서 류', hd: 1, al: 'C' }, { t: '비 고', hd: 1, al: 'C' }], ...DR]);
@@ -1564,7 +1571,7 @@ function buildDoc() {
   /* 9. 계약 */
   sec('계약 체결에 관한 사항');
   k = 0;
-  L(`${ko[k++]}. 계약 기간: ${C.c_cs ? `${KD(C.c_cs).replace(/\(.\)$/, '')} ~ ${KD(C.c_ce).replace(/\(.\)$/, '')} (${mon()}개월)` : '○○'} / 계약자: ${mgr ? '입주자대표회의를 대표하는 자' : t.ctr === '입주자대표회의' ? '입주자대표회의' : '관리주체'}`);
+  L(`${ko[k++]}. 계약 기간: ${ctText()} / 계약자: ${mgr ? '입주자대표회의를 대표하는 자' : t.ctr === '입주자대표회의' ? '입주자대표회의' : '관리주체'}`);
   L(`${ko[k++]}. 낙찰자가 특별한 사유 없이 10일 이내에 계약을 체결하지 않으면 낙찰을 무효로 하고, 유효한 입찰이 ${C.kind === '제한' ? 3 : 2}인 이상 남은 경우 차순위자를 낙찰자로 선정할 수 있습니다(선정지침 ${art('제21조제3항', '제29조제3항')}).`);
   L(`${ko[k++]}. 계약은 입찰정보 및 낙찰금액과 같은 내용으로 체결${svc ? '하며, 용역비 산출내역서를 첨부합니다' : '합니다'}(선정지침 ${art('제21조제2항', '제29조제2항')}).`);
   L(`${ko[k++]}. 계약보증금: ${C.c_bondFree ? '면제(선정지침 제31조제4항)' : `계약금액의 100분의 ${work ? 20 : 10}을 현금, 공제증권 또는 보증서로 납부하며, 계약상의 의무를 이행하지 않으면 발주처에 귀속됩니다(선정지침 제31조제3항~제5항).`}`);
@@ -1749,7 +1756,7 @@ function fillDefaults() {
 }
 function renderAnnex() {
   const A = annexes();
-  $('annexList').innerHTML = `<table><tbody>${A.map((a, i) => `<tr class="${a.on ? '' : 'docOff'}"><td style="width:70px;text-align:center"><input type="checkbox" data-ann="${a.k}" ${a.on ? 'checked' : ''} ${a.lock || a.na ? 'disabled' : ''}>${a.lock ? ' 🔒' : ''}</td><td>${esc(a.n)}<div class="muted" style="font-size:12.5px">${a.lock ? '필수 — ' + (a.k === 'bid' ? '선정지침 별지 제1호서식' : '적격심사 공고에는 세부배점 간격이 제시된 평가표가 반드시 들어가야 함(제24조①제3호)') : a.na ? '적격심사가 아니라 해당 없음' : '<span class="opt">선택</span>'}</div></td></tr>`).join('')}</tbody></table>`;
+  $('annexList').innerHTML = `<table><tbody>${A.map((a, i) => `<tr class="${a.on ? '' : 'docOff'}"><td style="width:70px;text-align:center"><input type="checkbox" data-ann="${a.k}" ${a.on ? 'checked' : ''} ${a.lock || a.na ? 'disabled' : ''}>${a.lock ? ' 🔒' : ''}</td><td>${esc(a.n)}<div class="muted" style="font-size:12.5px">${a.lock ? '필수 — 적격심사 공고에는 세부배점 간격이 제시된 평가표가 반드시 들어가야 함(제24조①제3호)' : a.na ? '적격심사가 아니라 해당 없음' : '<span class="opt">선택</span>' + (a.k === 'bid' ? ' — 입찰서 제출은 필수지만, 전자입찰은 K-apt에 입력하므로 서식 첨부 의무는 없음(제8조제1항)' : a.k === 'calc' ? ' — 산출내역서 제출은 필수, 양식 첨부는 선택. 발주처가 정한 산출 기준은 공고문에 적어야 함([별표3] 제7호)' : '')}</div></td></tr>`).join('')}</tbody></table>`;
   $('annexList').querySelectorAll('input[data-ann]').forEach(cb => cb.addEventListener('change', () => { G.ann = G.ann || {}; G.ann[cb.dataset.ann] = cb.checked; saveS(); renderDoc(); }));
 }
 function renderDoc() {
@@ -1857,7 +1864,7 @@ function reqItems() {
   L.push([`입찰참가자격(제${mgr ? 18 : 26}조 참가자격 제한)`, ...ok(C.c_lic, `${C.c_lic || '면허 미입력'}${C.kind === '제한' ? ' + 제한요건 ' + [C.c_useRec && '실적', C.c_useTech && '기술', C.c_useCap && '자본금'].filter(Boolean).join('·') : ''} + 결격사유 ${mgr ? 7 : 6}개 호`)]);
   L.push(['무효 입찰자에게 무효 이유를 알리는 방법', ...ok((S.doc.g_void || '').trim(), S.doc.g_void || '미입력')]);
   L.push(['입찰 관련 유의사항(입찰가격 산출방법 및 기준 등)', 'ok', `부가세 제외·${t.kind === 'svc' ? '월 용역비×개월' : work ? '총 공사금액' : '산정 방법'} 명시${lines(S.doc.g_price).length ? ` + 발주처 기준 ${lines(S.doc.g_price).length}줄${/○/.test(S.doc.g_price || '') ? ' — ⚠ 「○」 빈칸 남음' : ''}` : ''}${C.c_settle ? ' + 사후정산' : ''}`]);
-  L.push(['계약체결에 관한 사항(계약기간 등)', ...ok(C.c_cs && C.c_ce, C.c_cs ? `${KD(C.c_cs)} ~ ${KD(C.c_ce)} · 10일 이내 체결 · 계약보증금` : '계약기간 미입력')]);
+  L.push(['계약체결에 관한 사항(계약기간 등)', ...ok(ctHas(), ctHas() ? `${ctText()} · 10일 이내 체결 · 계약보증금` : '계약기간 미입력')]);
   L.push(['입찰보증금 및 그 귀속', 'ok', C.c_bondFree ? '면제' : `${C.c_bidBond || 5}% 이상 · 거절 시 귀속 · 반환`]);
   if (!mgr) L.push(['하자보수보증금 예치율(입대의 의결로 정한 경우)', work ? (C.def === '의결' ? (unfmt(C.c_defRate) >= 2 && unfmt(C.c_defRate) <= 10 ? 'ok' : 'fix') : 'ok') : 'na', work ? (C.def === '의결' ? `${C.c_defRate || '?'}% 명시` : '국가계약법 시행령 제62조 준용 명시') : '공사가 아님']);
   L.push(['그 밖에 입찰에 필요한 사항', 'ok', `공고문 우선 원칙·준거 법령·문의처${lines(S.doc.g_etc).length ? ` + ${lines(S.doc.g_etc).length}개 항목` : ''}`]);
